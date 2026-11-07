@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daftar Jaringan Cabang T-ONE</title>
-    <!-- Google Fonts Inter & Tailwind CSS CDN -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
@@ -17,7 +16,7 @@
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Jaringan Cabang Cirebon</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Jaringan Cabang T-ONE</h1>
                 <p class="text-sm text-slate-500 mt-1">Kelola dan pantau seluruh titik lokasi toko suku cadang serta bengkel resmi.</p>
             </div>
             <div class="flex items-center gap-3">
@@ -27,12 +26,11 @@
                 </a>
                 <a href="{{ url('/peta') }}" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold shadow-sm hover:bg-emerald-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                    Lihat Peta Interaktif
+                    Lihat Peta
                 </a>
             </div>
         </div>
 
-        <!-- Main Card Table Container -->
         <div class="bg-white rounded-2xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
