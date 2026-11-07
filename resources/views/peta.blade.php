@@ -11,11 +11,30 @@
     </style>
 </head>
 <body>
-    <div id="map"></div>
+    <div style="display: flex; height: 100vh;">
+    <!-- Sidebar Daftar Cabang -->
+    <div style="width: 300px; padding: 15px; overflow-y: auto; background: #f8f9fa;">
+        <h3>Daftar Cabang</h3>
+        <ul style="list-style: none; padding: 0;">
+            @foreach($branches as $b)
+                <li style="margin-bottom: 10px; padding: 10px; background: white; border-radius: 5px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"
+                    onclick="fokusKeCabang({{ $b->latitude }}, {{ $b->longitude }})">
+                    <strong>{{ $b->nama }}</strong><br>
+                    <small>{{ $b->alamat }}</small>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+
+    <!-- Peta -->
+    <div id="map" style="flex-grow: 1; height: 100vh;"></div>
+</div>
 
     <button id="btn-near" style="position:absolute; z-index: 1000; top:10px; right:10px; padding: 8px 12px; cursor:pointer;">
     Cabang Terdekat
 </button>
+
+
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
@@ -27,17 +46,55 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        const markers = [];
+
+
+const markers = [];
 
 branches.forEach(b => {
-    const m = L.marker([b.latitude, b.longitude]).addTo(map);
-    m.bindPopup('<b>' + b.nama + '</b><br>' + b.alamat);
+    // Tentukan warna pin berdasarkan jenis (toko = merah, bengkel = hijau)
+    const warna = b.jenis === 'bengkel' ? '#28a745' : '#dc3545';
+
+    // Membuat ikon pin kustom menggunakan CSS (bentuk teardrop/pin peta)
+    const customIcon = L.divIcon({
+        className: 'custom-pin',
+        html: `<div style="
+            background-color: ${warna}; 
+            width: 24px; 
+            height: 24px; 
+            border-radius: 50% 50% 50% 0; 
+            transform: rotate(-45deg); 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4); 
+            border: 2px solid #fff;">
+        </div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 24],
+        popupAnchor: [0, -24]
+    });
+
+    // Gunakan L.marker dengan ikon kustom
+    const m = L.marker([b.latitude, b.longitude], { icon: customIcon }).addTo(map);
+
+    // Format teks jenis untuk ditampilkan di popup
+    const namaJenis = b.jenis === 'bengkel' ? 'Bengkel Resmi' : 'Toko Suku Cadang';
+
+    m.bindPopup('<b>' + b.nama + '</b><br>Jenis: ' + namaJenis + '<br>' + b.alamat);
     markers.push(m);
 });
 
 if (markers.length) {
     map.fitBounds(L.featureGroup(markers).getBounds().pad(0.2));
 }
+
+L.polygon([
+    [-6.20, 106.80], 
+    [-6.20, 106.85],
+    [-6.15, 106.85], 
+    [-6.15, 106.80]
+], {
+    color: 'purple',
+    fillColor: '#f03',
+    fillOpacity: 0.3
+}).addTo(map).bindPopup('Area Layanan Toko');
 
 function jarakKm(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -72,6 +129,40 @@ document.getElementById('btn-near').addEventListener('click', () => {
         ]).pad(0.3));
     }, () => alert('Lokasi tidak dapat diakses. Periksa izin browser.'));
 });
+
+const sampleGeoJSON = {
+    "type": "Feature",
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+              [106.80, -6.15],
+              [106.85, -6.15],
+              [106.85, -6.20],
+              [106.80, -6.20],
+              [106.80, -6.15]
+            ]
+        ]
+    },
+    "properties": {
+        "name": "Zona Pengiriman Ekspres"
+    }
+};
+
+L.geoJSON(sampleGeoJSON, {
+    style: function (feature) {
+        return { color: "#00ff00", weight: 2 };
+    },
+    onEachFeature: function (feature, layer) {
+        if (feature.properties && feature.properties.name) {
+            layer.bindPopup(feature.properties.name);
+        }
+    }
+}).addTo(map);
+
+function fokusKeCabang(lat, lng) {
+    map.setView([lat, lng], 15); // Geser peta ke koordinat cabang dengan zoom level 15
+}
     </script>
     
 </body>

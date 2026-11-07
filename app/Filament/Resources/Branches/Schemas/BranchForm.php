@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Branches\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 
 class BranchForm
@@ -31,6 +32,12 @@ class BranchForm
                     ->minValue(-180)
                     ->maxValue(180)
                     ->helperText('Contoh: 106.8272'),
+                Select::make('jenis')
+                    ->options([
+                        'toko' => 'Toko Suku Cadang',
+                        'bengkel' => 'Bengkel Resmi',
+                    ])
+                    ->required(),
             ]);
     }
 }
